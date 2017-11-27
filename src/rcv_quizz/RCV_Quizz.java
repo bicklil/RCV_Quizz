@@ -23,7 +23,8 @@ public class RCV_Quizz extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("accueil.fxml"));
         
         Scene scene = new Scene(root);
-        
+        scene.getStylesheets().add("/res/flatterfx/flatterfx.css");
+ 
         stage.setScene(scene);
         stage.show();
     }

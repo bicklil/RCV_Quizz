@@ -5,6 +5,8 @@
  */
 package rcv_quizz;
 
+import org.json.simple.JSONObject;
+
 /**
  *
  * @author jc
@@ -18,7 +20,7 @@ public class Situation {
     
     public Situation(int num){
         numero = num;
-        JSONObject a =(JSONObject)
+///        JSONObject a =(JSONObject);
         
     }
     
