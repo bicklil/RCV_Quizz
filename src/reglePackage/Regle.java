@@ -58,4 +58,12 @@ public class Regle {
     public String getSituation(){
         return situation;
     }
+    
+    public static String getTitre(String num) throws FileNotFoundException, IOException, ParseException{
+        String titre;
+        JSONParser parser = new JSONParser();
+        JSONObject a = (JSONObject) parser.parse(new FileReader("res/regle/"+num+".json"));
+        titre = (String) a.get("titre");
+        return titre;
+    }
 }

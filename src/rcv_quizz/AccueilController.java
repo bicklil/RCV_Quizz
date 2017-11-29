@@ -58,7 +58,7 @@ public class AccueilController implements Initializable {
         Parent root;
         
         stage=(Stage) accueilRegle.getScene().getWindow();
-        root = FXMLLoader.load(getClass().getResource("regle.fxml"));
+        root = FXMLLoader.load(getClass().getResource("liste_rcv.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add("/flatterfx/flatterfx.css");
           
