@@ -1,5 +1,9 @@
-object {
-int : 1,
-String : "blabla"
-
+{
+"numero":1,
+"explication":"expli",
+"nombreReponse":2,
+"reponseJuste":1,
+"texteReponse":["vert","rouge"]
+"couleurReponse":[,]
+"references":[10]
 }

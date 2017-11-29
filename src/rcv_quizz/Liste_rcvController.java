@@ -7,28 +7,18 @@ package rcv_quizz;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.TextFlow;
 
 /**
  * FXML Controller class
  *
  * @author jc
  */
-public class ChoixQuizzController implements Initializable {
+public class Liste_rcvController implements Initializable {
 
     /**
      * Initializes the controller class.
      */
-    @FXML
-    private TextFlow textflow;
-    private Pane animCadre;
-    private FlowPane buttonStock;
-    
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO

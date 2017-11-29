@@ -45,6 +45,7 @@ public class AccueilController implements Initializable {
         // pour l'instant choix quizz pas implemente
         root = FXMLLoader.load(getClass().getResource("quizz.fxml"));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("/flatterfx/flatterfx.css");
           
         stage.setScene(scene);
         stage.show();
@@ -59,6 +60,7 @@ public class AccueilController implements Initializable {
         stage=(Stage) accueilRegle.getScene().getWindow();
         root = FXMLLoader.load(getClass().getResource("regle.fxml"));
         Scene scene = new Scene(root);
+        scene.getStylesheets().add("/flatterfx/flatterfx.css");
           
         stage.setScene(scene);
         stage.show();
