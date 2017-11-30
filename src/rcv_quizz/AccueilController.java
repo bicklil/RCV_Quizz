@@ -37,7 +37,6 @@ public class AccueilController implements Initializable {
     
     @FXML
     private void handleButtonAccueilQuizz() throws IOException{
-        System.out.println("boutton presse");
         Stage stage;
         Parent root;
         
@@ -53,7 +52,6 @@ public class AccueilController implements Initializable {
 
     @FXML
     private void handleButtonAccueilRegle() throws IOException{
-        System.out.println("boutton presse");
         Stage stage;
         Parent root;
         

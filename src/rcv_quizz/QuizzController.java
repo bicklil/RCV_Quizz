@@ -5,6 +5,7 @@
  */
 package rcv_quizz;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
@@ -18,8 +19,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -44,25 +46,46 @@ public class QuizzController implements Initializable {
     @FXML
     private Pane animCadre;
     @FXML
-    private FlowPane buttonStock;
+    private VBox buttonStock;
     
     private List<Button> myButton;
     private Situation affiche;
+    private int nombreSituation;
+    private int nombreJuste;
+    private int nombreFaux;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        nombreJuste = 0;
+        nombreFaux = 0;
         try {
+            nbSituation();
             nouvelleSituation(1);
         } catch (IOException | ParseException ex) {
             Logger.getLogger(QuizzController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }    
     
+    private void nbSituation(){
+        nombreSituation = 0;
+        File repertoire = new File("res/situation");
+        String[] listefichiers=repertoire.list(); 
+        for (String listefichier : listefichiers) {
+            nombreSituation = nombreSituation+1;
+        }
+    }
+    
     private void nouvelleSituation(int i) throws IOException, FileNotFoundException, ParseException{
-            affiche = new Situation(i);
-            System.out.println(affiche.getNumero());
-            createButton();
-            initTextFlow();
+            if (i <= nombreSituation)
+            {
+                affiche = new Situation(i);
+                createButton();
+                initTextFlow();
+            }
+            else{
+                //plus de situation  on affiche les result
+                affichePasDeSitutuation();
+            }
     }
     
     private void createButton(){
@@ -70,6 +93,7 @@ public class QuizzController implements Initializable {
         buttonStock.getChildren().removeAll(buttonStock.getChildren());
         for (int i=0;i<affiche.getNombreReponse();i++){
             myButton.add(new Button(affiche.getTexteReponse().get(i)));
+            myButton.get(i).setMaxWidth(Double.MAX_VALUE);
             buttonStock.getChildren().add(myButton.get(i));
             if(i == affiche.getReponseJuste()){
                 myButton.get(i).setOnAction(new EventHandler<ActionEvent>() {
@@ -100,6 +124,7 @@ public class QuizzController implements Initializable {
     }
 
     private void actionDefaite() {
+        nombreFaux = nombreFaux +1;
         Text text1 = new Text("Mauvaise Reponse\n");
         text1.setFill(Color.RED);
         text1.setFont(Font.font("Helvetica", FontPosture.ITALIC, 20));
@@ -109,10 +134,12 @@ public class QuizzController implements Initializable {
         textFlow.getChildren().removeAll(textFlow.getChildren()); 
         textFlow.getChildren().add(text1);
         textFlow.getChildren().add(text2);
+        reference();
         questionSuivante();
     }
 
     private void actionVictoire() {
+        nombreJuste = nombreJuste +1;
         Text text1 = new Text("Bonne Reponse\n");
         text1.setFill(Color.GREEN);
         text1.setFont(Font.font("Helvetica", FontPosture.ITALIC, 20));
@@ -122,22 +149,63 @@ public class QuizzController implements Initializable {
         textFlow.getChildren().removeAll(textFlow.getChildren()); 
         textFlow.getChildren().add(text1);
         textFlow.getChildren().add(text2);
+        reference();
         questionSuivante();
+    }
+    
+    private void reference(){
+        textFlow.getChildren().add(new Text("\nvoir les regles :"));
+        Hyperlink hp ;
+        for(String num:affiche.getReference()){
+            hp = new Hyperlink();
+            hp.setText(num);
+            hp.setOnAction(new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent e){
+                    // faire une nouvelle fenetre avec la regle
+                    System.out.println("test");
+                }
+            });
+            textFlow.getChildren().add(hp);
+        }
+        
     }
     
     private void questionSuivante(){
         buttonStock.getChildren().removeAll(buttonStock.getChildren());
-        Button next = new Button("Question suivante");
-        next.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    nouvelleSituation(affiche.getNumero()+1);
-                } catch (IOException | ParseException ex) {
-                    Logger.getLogger(QuizzController.class.getName()).log(Level.SEVERE, null, ex);
+        Button next;
+        if (affiche.getNumero()+1 <= nombreSituation){
+            next = new Button("Question suivante");
+            next.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try {
+                        nouvelleSituation(affiche.getNumero()+1);
+                    } catch (IOException | ParseException ex) {
+                        Logger.getLogger(QuizzController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
-            }
-        });
+            });
+        }
+        else{
+            next = new Button("Voir les resultat");
+            next.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    afficheResultat();
+                }
+            });
+            
+        }
         buttonStock.getChildren().add(next);
+    }
+
+    private void afficheResultat() {
+        System.out.println("affiche resul");
+        
+    }
+
+    private void affichePasDeSitutuation() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

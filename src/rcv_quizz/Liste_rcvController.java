@@ -19,6 +19,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.json.simple.parser.ParseException;
 import reglePackage.Regle;
@@ -61,10 +65,15 @@ public class Liste_rcvController implements Initializable {
             numero = listefichier.substring(0, listefichier.length() - 5);
             Titre = Regle.getTitre(numero);
             lien = new Button(String.format("Regle n°%s : %s\n",numero,Titre));
+            lien.setMaxWidth(Double.MAX_VALUE);
             lien.setOnAction(new EventHandler<ActionEvent>(){
                 @Override
                 public void handle(ActionEvent event){
-                    affichageRegle(event);
+                    try {
+                        affichageRegle(event);
+                    } catch (IOException | ParseException ex) {
+                        Logger.getLogger(Liste_rcvController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             listeRegleVbox.getChildren().add(lien);
@@ -72,12 +81,18 @@ public class Liste_rcvController implements Initializable {
        
     }
     
-    public void affichageRegle(ActionEvent event){
-        //parse le texte du bouton
+    public void affichageRegle(ActionEvent event) throws IOException, FileNotFoundException, ParseException{
+        Regle reg;
         Button but = (Button) event.getSource();
         String texte = but.getText().substring(8,but.getText().length());
-        System.out.println(texte);
-                //il faut split
+        String[] res = texte.split(" :");
+        reg = new Regle(res[0]);
+        explication.getChildren().removeAll(explication.getChildren()); 
+        Text text1 = new Text(reg.getContenu());
+        text1.setFill(Color.BLACK);
+        text1.setFont(Font.font("Helvetica", FontPosture.REGULAR, 20));
+        explication.getChildren().add(text1);
+        
     }
     
 }

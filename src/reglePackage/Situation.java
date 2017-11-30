@@ -26,11 +26,12 @@ public class Situation {
     long nombreReponse;
     long reponseJuste;
     List<String> texteReponse;
+    List<String> reference;
     
     public Situation(int num) throws FileNotFoundException, IOException, ParseException{
-        System.out.println("test");
         numero = num;
         texteReponse = new ArrayList<>();
+        reference = new ArrayList<>();
         JSONParser parser = new JSONParser();
         JSONObject a = (JSONObject) parser.parse(new FileReader("res/situation/"+num+".json")) ;
         explication = (String) a.get("explication");
@@ -40,6 +41,13 @@ public class Situation {
         Iterator<String> iterator = msg.iterator();
         while (iterator.hasNext()) {
             texteReponse.add(iterator.next());
+        }
+        
+        JSONArray ref = (JSONArray) a.get("references");
+        
+        Iterator<String> iterator2 = ref.iterator();
+        while(iterator2.hasNext()){
+            reference.add(iterator2.next());
         }
     }
     
@@ -62,7 +70,10 @@ public class Situation {
     public long getNombreReponse(){
         return nombreReponse;
     }
-        
+    
+    public List<String> getReference(){
+        return reference;
+    }
         
     
     
