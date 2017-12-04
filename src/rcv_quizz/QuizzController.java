@@ -17,7 +17,10 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.Pane;
@@ -27,6 +30,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import reglePackage.Situation;
 
@@ -163,7 +167,27 @@ public class QuizzController implements Initializable {
                 @Override
                 public void handle(ActionEvent e){
                     // faire une nouvelle fenetre avec la regle
-                    System.out.println("test");
+                    Parent root;
+                    
+                    Stage stage;
+                    Scene scene;
+                    try{
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("descriptionRegle.fxml"));
+                        root = (Parent) fxmlLoader.load();
+                        DescriptionRegleController controller=fxmlLoader.<DescriptionRegleController>getController();
+                        controller.setNum(Integer.parseInt(num));
+                        stage = new Stage();
+                        stage.setTitle("Description de la regle");
+                        scene = new Scene(root, 450, 450);
+                        scene.getStylesheets().add("/flatterfx/flatterfx.css");
+
+                        stage.setScene(scene);
+                        stage.show();
+
+                    }
+                    catch(IOException ex){
+                        Logger.getLogger(Liste_rcvController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             textFlow.getChildren().add(hp);
@@ -192,7 +216,11 @@ public class QuizzController implements Initializable {
             next.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    afficheResultat();
+                    try {
+                        afficheResultat();
+                    } catch (IOException ex) {
+                        Logger.getLogger(QuizzController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
             
@@ -200,8 +228,18 @@ public class QuizzController implements Initializable {
         buttonStock.getChildren().add(next);
     }
 
-    private void afficheResultat() {
-        System.out.println("affiche resul");
+    private void afficheResultat() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("resultat.fxml"));
+        Parent root = (Parent) fxmlLoader.load();
+        ResultatController controller=fxmlLoader.<ResultatController>getController();
+        controller.setVal(nombreJuste,nombreFaux);
+        
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("/flatterfx/flatterfx.css");
+        Stage stage=(Stage) buttonStock.getScene().getWindow();
+ 
+        stage.setScene(scene);
+        stage.show();
         
     }
 

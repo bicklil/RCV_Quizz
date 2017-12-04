@@ -15,15 +15,18 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import reglePackage.Regle;
 
@@ -41,6 +44,9 @@ public class Liste_rcvController implements Initializable {
     @FXML
     private TextFlow explication ;
     
+    @FXML
+    private Button buttonAccueil;
+    
     /**
      * Initializes the controller class.
      */
@@ -52,8 +58,34 @@ public class Liste_rcvController implements Initializable {
             Logger.getLogger(Liste_rcvController.class.getName()).log(Level.SEVERE, null, ex);
             
         }
+        buttonAccueil.setMaxWidth(Double.MAX_VALUE);
+        buttonAccueil.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        try {
+                            retourAccueil();
+                        } catch (IOException ex) {
+                            Logger.getLogger(ResultatController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
     }
 
+        public void retourAccueil() throws IOException{
+        Stage stage;
+        Parent root;
+        
+        stage=(Stage) listeRegleVbox.getScene().getWindow();
+        // pour l'instant choix quizz pas implemente
+        root = FXMLLoader.load(getClass().getResource("accueil.fxml"));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add("/flatterfx/flatterfx.css");
+          
+        stage.setScene(scene);
+        stage.show();
+        
+    }
+    
     public void initListeRegle() throws IOException, FileNotFoundException, ParseException{
         String [] listefichiers; 
         String numero;
