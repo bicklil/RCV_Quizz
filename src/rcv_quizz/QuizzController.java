@@ -8,12 +8,14 @@ package rcv_quizz;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,8 +25,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -48,7 +52,7 @@ public class QuizzController implements Initializable {
     @FXML
     private TextFlow textFlow;
     @FXML
-    private Pane animCadre;
+    private MediaView animCadre;
     @FXML
     private VBox buttonStock;
     
@@ -75,6 +79,7 @@ public class QuizzController implements Initializable {
         File repertoire = new File("res/situation");
         String[] listefichiers=repertoire.list(); 
         for (String listefichier : listefichiers) {
+            if (listefichier.endsWith("json"))
             nombreSituation = nombreSituation+1;
         }
     }
@@ -85,11 +90,24 @@ public class QuizzController implements Initializable {
                 affiche = new Situation(i);
                 createButton();
                 initTextFlow();
+                afficheAnim();
             }
             else{
                 //plus de situation  on affiche les result
                 affichePasDeSitutuation();
             }
+    }
+    
+    private void afficheAnim() throws MalformedURLException{
+    File f = new File("res/situation", affiche.getMedia());
+    Media media = new Media(f.toURI().toURL().toString());
+    MediaPlayer play = new MediaPlayer(media);
+    
+    play.setAutoPlay(true);
+    play.setCycleCount(MediaPlayer.INDEFINITE);
+    animCadre.setMediaPlayer(play);
+    
+    
     }
     
     private void createButton(){

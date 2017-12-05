@@ -25,6 +25,7 @@ public class Situation {
     String explication;
     long nombreReponse;
     long reponseJuste;
+    String media;
     List<String> texteReponse;
     List<String> reference;
     
@@ -42,7 +43,7 @@ public class Situation {
         while (iterator.hasNext()) {
             texteReponse.add(iterator.next());
         }
-        
+        media =(String) a.get("media");
         JSONArray ref = (JSONArray) a.get("references");
         
         Iterator<String> iterator2 = ref.iterator();
@@ -75,7 +76,9 @@ public class Situation {
         return reference;
     }
         
-    
+    public String getMedia(){
+        return media;
+    }
     
     
 }
